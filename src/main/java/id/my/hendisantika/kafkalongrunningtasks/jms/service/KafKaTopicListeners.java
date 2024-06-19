@@ -1,5 +1,6 @@
 package id.my.hendisantika.kafkalongrunningtasks.jms.service;
 
+import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;

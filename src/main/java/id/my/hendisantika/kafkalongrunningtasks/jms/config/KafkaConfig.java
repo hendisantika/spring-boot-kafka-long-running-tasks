@@ -1,5 +1,6 @@
 package id.my.hendisantika.kafkalongrunningtasks.jms.config;
 
+import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
