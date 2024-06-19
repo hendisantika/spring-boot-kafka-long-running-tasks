@@ -3,6 +3,7 @@ package id.my.hendisantika.kafkalongrunningtasks.web.service;
 import id.my.hendisantika.kafkalongrunningtasks.jms.service.KafkaProducerService;
 import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskRequest;
 import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus;
+import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
@@ -48,19 +49,19 @@ public class TaskService {
         try {
             createNewTopic(taskId);
 
-            updateTaskExecutionProgess(new TaskStatus(taskId, taskRequest.getName(), 0.0f, Status.SUBMITTED));
+            updateTaskExecutionProgress(new TaskStatus(taskId, taskRequest.getName(), 0.0f, Status.SUBMITTED));
 
             Thread.sleep(2000L);
-            updateTaskExecutionProgess(new TaskStatus(taskId, taskRequest.getName(), 10.0f, Status.STARTED));
+            updateTaskExecutionProgress(new TaskStatus(taskId, taskRequest.getName(), 10.0f, Status.STARTED));
 
             Thread.sleep(5000L);
-            updateTaskExecutionProgess(new TaskStatus(taskId, taskRequest.getName(), 50.0f, Status.RUNNING));
+            updateTaskExecutionProgress(new TaskStatus(taskId, taskRequest.getName(), 50.0f, Status.RUNNING));
 
             Thread.sleep(5000L);
-            updateTaskExecutionProgess(new TaskStatus(taskId, taskRequest.getName(), 100.0f, Status.FINISHED));
+            updateTaskExecutionProgress(new TaskStatus(taskId, taskRequest.getName(), 100.0f, Status.FINISHED));
 
         } catch (InterruptedException | ExecutionException e) {
-            updateTaskExecutionProgess(new TaskStatus(taskId, taskRequest.getName(), 100.0f, Status.TERMINATED));
+            updateTaskExecutionProgress(new TaskStatus(taskId, taskRequest.getName(), 100.0f, Status.TERMINATED));
             throw new RuntimeException(e);
         }
     }
@@ -73,6 +74,10 @@ public class TaskService {
             adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
         }
         kafkaConsumer.subscribe(Collections.singletonList(topicName));
+    }
+
+    void updateTaskExecutionProgress(TaskStatus taskStatus) {
+        kafkaProducerService.send(taskStatus.getTaskId(), taskStatus.getTaskId(), taskStatus);
     }
 
 }
