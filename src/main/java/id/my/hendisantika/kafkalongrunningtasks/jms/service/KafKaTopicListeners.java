@@ -2,6 +2,7 @@ package id.my.hendisantika.kafkalongrunningtasks.jms.service;
 
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -20,5 +21,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @KafkaListener(topics = "general-task-topic", groupId = "task-group")
 public class KafKaTopicListeners {
-
+    @KafkaHandler
+    public void handleMessage(TaskStatus taskStatus) {
+        log.info(String.format("Task status is updated : " + taskStatus));
+    }
 }
