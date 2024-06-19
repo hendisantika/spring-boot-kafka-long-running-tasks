@@ -24,4 +24,17 @@ import org.springframework.stereotype.Service;
 public class KafkaProducerService {
 
     private final KafkaTemplate<String, TaskStatus> kafkaTemplate;
+
+    public void send(String topicName, String key, TaskStatus value) {
+        var future = kafkaTemplate.send(topicName, key, value);
+
+        future.whenComplete((sendResult, exception) -> {
+            if (exception != null) {
+                future.completeExceptionally(exception);
+            } else {
+                future.complete(sendResult);
+            }
+            log.info("Task status send to Kafka topic : " + value);
+        });
+    }
 }
