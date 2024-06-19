@@ -3,10 +3,13 @@ package id.my.hendisantika.kafkalongrunningtasks.web.controller;
 import id.my.hendisantika.kafkalongrunningtasks.jms.service.KafkaConsumerService;
 import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskRequest;
 import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskResponse;
+import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus;
 import id.my.hendisantika.kafkalongrunningtasks.web.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,5 +45,14 @@ public class TaskController {
         UriComponents progressURL = b.path("/tasks/{id}/progress").buildAndExpand(taskId);
         taskService.process(taskId, taskRequest, b);
         return ResponseEntity.accepted().location(progressURL.toUri()).build();
+    }
+
+    @GetMapping("{taskId}/progress")
+    public ResponseEntity<?> processAsync(@PathVariable String taskId) {
+        TaskStatus taskStatus = kafkaConsumerService.getLatestTaskStatus(taskId);
+        if (taskStatus == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(taskStatus);
     }
 }
