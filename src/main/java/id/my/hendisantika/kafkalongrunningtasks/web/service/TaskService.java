@@ -6,13 +6,19 @@ import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.config.TopicConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -59,5 +65,14 @@ public class TaskService {
         }
     }
 
+    private void createNewTopic(String topicName) throws ExecutionException, InterruptedException {
+        Map<String, String> topicConfig = new HashMap<>();
+        topicConfig.put(TopicConfig.RETENTION_MS_CONFIG, String.valueOf(24 * 60 * 60 * 1000)); // 24 hours retention
+        NewTopic newTopic = new NewTopic(topicName, 1, (short) 1).configs(topicConfig);
+        try (AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
+            adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
+        }
+        kafkaConsumer.subscribe(Collections.singletonList(topicName));
+    }
 
 }
