@@ -6,3 +6,9 @@
 2. Navigate to the folder: `cd spring-boot-kafka-long-running-tasks`
 3. Run the application: `mvn clean spring-boot:run`
 4. Open your favorite browser: http://localhost:9090/swagger-ui
+
+### Image Screenshot
+
+Swagger UI
+
+![Swagger UI](img/Swagger-UI.png "Swagger UI")
