@@ -6,6 +6,7 @@ plugins {
 
 group = 'id.my.hendisantika'
 version = '0.0.1-SNAPSHOT'
+description = 'Task API Management'
 
 java {
     toolchain {
