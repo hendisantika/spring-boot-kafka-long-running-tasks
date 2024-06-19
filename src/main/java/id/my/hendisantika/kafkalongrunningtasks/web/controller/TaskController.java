@@ -5,6 +5,10 @@ import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskRequest;
 import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskResponse;
 import id.my.hendisantika.kafkalongrunningtasks.web.model.TaskStatus;
 import id.my.hendisantika.kafkalongrunningtasks.web.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +43,23 @@ public class TaskController {
     private final KafkaConsumerService kafkaConsumerService;
 
     @PostMapping
+    @Operation(
+            summary = "Add New Task Data",
+            description = "Add New Task Data.",
+            tags = {"Tutorial"})
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    description = "Success",
+                    responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation =
+                            TaskResponse.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Not found", responseCode = "404",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Internal error", responseCode = "500"
+                    , content = @Content)
+    }
+    )
     public ResponseEntity<TaskResponse> processAsync(@RequestBody TaskRequest taskRequest,
                                                      UriComponentsBuilder b) {
         String taskId = UUID.randomUUID().toString();
@@ -48,6 +69,23 @@ public class TaskController {
     }
 
     @GetMapping("{taskId}/progress")
+    @Operation(
+            summary = "Check Task Progress Task Data",
+            description = "Check Task Progress Task Data.",
+            tags = {"Tutorial"})
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    description = "Success",
+                    responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation =
+                            TaskResponse.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Not found", responseCode = "404",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Internal error", responseCode = "500"
+                    , content = @Content)
+    }
+    )
     public ResponseEntity<?> processAsync(@PathVariable String taskId) {
         TaskStatus taskStatus = kafkaConsumerService.getLatestTaskStatus(taskId);
         if (taskStatus == null) {
