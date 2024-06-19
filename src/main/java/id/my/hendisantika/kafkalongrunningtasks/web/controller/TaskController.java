@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@Tag(name = "Task", description = "Endpoint for managing Task")
 public class TaskController {
 
     private final TaskService taskService;
@@ -46,7 +48,7 @@ public class TaskController {
     @Operation(
             summary = "Add New Task Data",
             description = "Add New Task Data.",
-            tags = {"Tutorial"})
+            tags = {"Task"})
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     description = "Success",
@@ -72,7 +74,7 @@ public class TaskController {
     @Operation(
             summary = "Check Task Progress Task Data",
             description = "Check Task Progress Task Data.",
-            tags = {"Tutorial"})
+            tags = {"Task"})
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     description = "Success",
