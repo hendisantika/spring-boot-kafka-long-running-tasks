@@ -4,6 +4,7 @@ import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,5 +25,10 @@ public class KafKaTopicListeners {
     @KafkaHandler
     public void handleMessage(TaskStatus taskStatus) {
         log.info(String.format("Task status is updated : " + taskStatus));
+    }
+
+    @KafkaHandler(isDefault = true)
+    public void handleMessage(@Payload Object message) {
+        log.info(String.format("Task status is updated : " + message.toString()));
     }
 }
