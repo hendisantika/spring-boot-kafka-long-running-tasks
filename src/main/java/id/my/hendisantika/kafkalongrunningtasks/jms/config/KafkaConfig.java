@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
+import org.springframework.kafka.core.KafkaAdmin;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,4 +33,10 @@ public class KafkaConfig {
                 .build();
     }
 
+    @Bean
+    public KafkaAdmin kafkaAdmin() {
+        KafkaAdmin kafkaAdmin = new KafkaAdmin(kafkaProperties.buildAdminProperties());
+        kafkaAdmin.setFatalIfBrokerNotAvailable(kafkaProperties.getAdmin().isFailFast());
+        return kafkaAdmin;
+    }
 }
