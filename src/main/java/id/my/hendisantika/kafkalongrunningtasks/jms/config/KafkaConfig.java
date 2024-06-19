@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -88,5 +89,12 @@ public class KafkaConfig {
         var kafkaTemplate = new KafkaTemplate<>(producerFactory());
         kafkaTemplate.setConsumerFactory(consumerFactory());
         return kafkaTemplate;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, TaskStatus> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TaskStatus> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        return factory;
     }
 }
