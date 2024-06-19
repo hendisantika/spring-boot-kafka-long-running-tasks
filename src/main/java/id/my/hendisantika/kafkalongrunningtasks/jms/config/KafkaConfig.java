@@ -1,9 +1,12 @@
 package id.my.hendisantika.kafkalongrunningtasks.jms.config;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,4 +23,13 @@ import org.springframework.context.annotation.Configuration;
 public class KafkaConfig {
 
     private final KafkaProperties kafkaProperties;
+
+    @Bean
+    public NewTopic taskTopic() {
+        return TopicBuilder.name("task-topic")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
 }
